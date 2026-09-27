@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2F4F6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="기경대 대여">
+<title>기경대 대여사업</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#F2F4F6; --card:#FFFFFF; --soft:#F9FAFB; --line:#E5E8EB;
+  --ink:#191F28; --ink2:#4E5968; --mute:#8B95A1; --faint:#B0B8C1;
+  --blue:#3182F6; --blue-d:#1B64DA; --blue-bg:#E8F3FF;
+  --orange:#F08C00; --orange-bg:#FFF3E0;
+  --red:#F04452; --red-bg:#FFEBEE;
+  --green:#12B886; --green-bg:#E3F8EF;
+  --purple:#7B61FF; --purple-bg:#F1EDFF;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#E9ECEF}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;letter-spacing:-.2px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;background:var(--bg);position:relative;padding-bottom:calc(84px + var(--safe-b))}
+.app.white{background:#fff}
+.app.notab{padding-bottom:0}
+.view{padding:calc(14px + env(safe-area-inset-top,0px)) 20px 24px}
+
+/* top */
+.top{display:flex;align-items:center;justify-content:space-between;height:40px}
+.top small{font-size:14px;color:var(--mute);font-weight:500}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;position:relative}
+.icon-btn i{font-size:24px;color:var(--ink2)}
+.icon-btn .dot{position:absolute;top:8px;right:9px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)}
+h1{font-size:25px;line-height:1.36;font-weight:700;letter-spacing:-.6px;margin:6px 0 20px}
+.sub{font-size:15px;color:var(--mute);margin:-14px 0 22px}
+
+/* segmented */
+.seg{display:flex;background:#E5E8EB;border-radius:14px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;height:40px;border-radius:11px;font-size:15px;font-weight:600;color:var(--mute);transition:background .15s,color .15s}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* card */
+.card{background:var(--card);border-radius:22px;padding:18px 16px}
+.card+.card,.card+.sug{margin-top:12px}
+.chips{display:flex;gap:6px;margin-bottom:6px}
+.chip{height:32px;padding:0 13px;border-radius:10px;font-size:14px;font-weight:600;background:var(--bg);color:#6B7684}
+.chip.on{background:var(--blue-bg);color:var(--blue)}
+
+/* item rows */
+.row{display:flex;align-items:center;gap:14px;width:100%;padding:12px 2px;text-align:left;border-radius:14px}
+.row:active{background:var(--soft)}
+.ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:0 0 46px}
+.ico i{font-size:23px}
+.t-blue{background:var(--blue-bg)}.t-blue i{color:var(--blue)}
+.t-orange{background:var(--orange-bg)}.t-orange i{color:var(--orange)}
+.t-pink{background:var(--red-bg)}.t-pink i{color:var(--red)}
+.t-mint{background:var(--green-bg)}.t-mint i{color:var(--green)}
+.t-purple{background:var(--purple-bg)}.t-purple i{color:var(--purple)}
+.t-gray{background:var(--bg)}.t-gray i{color:var(--faint)}
+.nm{flex:1;min-width:0}
+.nm b{display:block;font-size:17px;font-weight:600;letter-spacing:-.4px}
+.nm small{display:block;font-size:13.5px;color:var(--mute);margin-top:2px}
+.qty{text-align:right}
+.qty b{display:block;font-size:17px;font-weight:700}
+.qty small{display:block;font-size:12.5px;font-weight:600;margin-top:1px}
+.s-ok{color:var(--blue)} .s-low{color:var(--orange)} .s-none{color:#F4838C}
+.row.empty .nm b,.row.empty .nm small{color:var(--faint)}
+.row.empty .ico{background:var(--bg)} .row.empty .ico i{color:var(--faint)}
+.updated{display:flex;align-items:center;justify-content:center;gap:5px;margin:16px auto 0;font-size:13px;color:var(--faint)}
+.updated i{font-size:14px}
+
+/* rent */
+.back{width:40px;height:40px;margin-left:-8px;display:grid;place-items:center}
+.back i{font-size:26px}
+.place{display:flex;align-items:center;gap:13px;background:var(--soft);border-radius:18px;padding:16px;margin-bottom:34px}
+.place small{display:block;font-size:13px;color:var(--mute)}
+.place b{font-size:16px;font-weight:600}
+.field{margin-bottom:28px}
+.field label{display:block;font-size:14px;color:var(--mute);margin-bottom:6px}
+.field input{width:100%;border:0;border-bottom:2px solid var(--line);padding:6px 0 10px;font-size:21px;font-weight:600;outline:none;background:transparent;letter-spacing:-.3px;border-radius:0}
+.field input::placeholder{color:#D1D6DB;font-weight:500}
+.field input:focus{border-bottom-color:var(--blue)}
+.field .err{font-size:13px;color:var(--red);margin-top:6px;min-height:18px}
+.due{display:flex;justify-content:space-between;align-items:center;font-size:16px;color:var(--ink2)}
+.due b{color:var(--ink);font-weight:700}
+.due em{font-style:normal;color:var(--blue);font-weight:600;margin-left:5px}
+.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;padding:12px 20px calc(16px + var(--safe-b));background:linear-gradient(to top,#fff 75%,rgba(255,255,255,0))}
+.note{display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;color:var(--mute);margin-bottom:12px}
+.primary{width:100%;height:58px;border-radius:17px;background:var(--blue);color:#fff;font-size:17px;font-weight:600;transition:opacity .15s,transform .1s}
+.primary:active{transform:scale(.985)}
+.primary:disabled{opacity:.35;cursor:default}
+
+/* my */
+.banner{display:flex;align-items:center;gap:9px;border-radius:16px;padding:15px 16px;margin-bottom:12px;font-size:15px;font-weight:600}
+.banner i{font-size:20px}
+.b-warn{background:#FFF4E5;color:#E07B00}
+.b-late{background:var(--red-bg);color:#D22030}
+.b-ok{background:var(--green-bg);color:#0C8A64}
+.b-info{background:var(--blue-bg);color:var(--blue-d)}
+.card h3{font-size:14px;font-weight:500;color:var(--mute);margin-bottom:6px}
+.rent-item .row{padding:10px 0}
+.dd{font-size:13px;font-weight:700;padding:4px 9px;border-radius:8px}
+.dd-warn{background:#FFF4E5;color:#E07B00}
+.dd-late{background:var(--red-bg);color:#D22030}
+.dd-calm{background:var(--bg);color:var(--ink2)}
+.ghost{width:100%;height:50px;border-radius:14px;background:var(--blue-bg);color:var(--blue-d);font-size:16px;font-weight:600;margin:6px 0 4px}
+.ghost:active{background:#D9EAFF}
+.rent-item+.rent-item{border-top:1px solid var(--bg);margin-top:8px;padding-top:8px}
+.hist .row{padding:10px 0}
+.hist .qty{font-size:14px;color:var(--mute)}
+.none{text-align:center;padding:18px 0 10px}
+.none i{font-size:30px;color:var(--faint)}
+.none p{font-size:15px;font-weight:600;margin-top:8px}
+.none small{display:block;font-size:13.5px;color:var(--mute);margin-top:4px}
+.none .link{margin-top:14px;font-size:14px;font-weight:600;color:var(--blue);padding:8px 14px;background:var(--blue-bg);border-radius:10px}
+.sug{display:flex;align-items:center;gap:14px;width:100%;background:#fff;border-radius:22px;padding:16px;text-align:left}
+.sug>i{font-size:20px;color:var(--faint)}
+.hint{background:#fff;border-radius:18px;padding:15px 16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
+.hint p{font-size:14.5px;line-height:1.5;color:var(--ink2);flex:1}
+.hint b{color:var(--ink)}
+.hint button i{font-size:18px;color:var(--faint)}
+.reset{display:block;margin:22px auto 0;font-size:13px;color:var(--faint);text-decoration:underline;text-underline-offset:3px}
+
+/* qr */
+.scan{background:#fff;border-radius:22px;padding:28px 20px;text-align:center;margin-bottom:12px}
+.scan .frame{width:132px;height:132px;margin:0 auto 18px;border-radius:26px;background:var(--blue-bg);display:grid;place-items:center}
+.scan .frame i{font-size:60px;color:var(--blue)}
+.scan p{font-size:15px;line-height:1.55;color:var(--ink2)}
+.scan b{color:var(--ink)}
+.qrgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.qrbox{background:var(--soft);border-radius:16px;padding:14px;text-align:center}
+.qrbox .qr{background:#fff;padding:10px;border-radius:12px;display:inline-block}
+.qrbox .qr img,.qrbox .qr canvas{display:block;width:120px!important;height:120px!important}
+.qrbox b{display:block;font-size:14px;margin-top:9px}
+.qrbox small{font-size:12px;color:var(--mute)}
+
+/* tabbar */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;background:#fff;border-top:1px solid #EEF0F2;display:flex;padding:8px 0 calc(8px + var(--safe-b));z-index:10}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--faint)}
+.tabbar i{font-size:26px}
+.tabbar span{font-size:11.5px;font-weight:600}
+.tabbar .on{color:var(--ink)}
+
+/* sheet & toast */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:20;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;width:100%;max-width:480px;transform:translate(-50%,100%);background:#fff;border-radius:26px 26px 0 0;padding:10px 20px calc(20px + var(--safe-b));z-index:21;transition:transform .25s cubic-bezier(.2,.8,.2,1);max-height:86dvh;overflow:auto}
+.sheet.show{transform:translate(-50%,0)}
+.grab{width:38px;height:5px;background:var(--line);border-radius:3px;margin:0 auto 18px}
+.sheet h2{font-size:21px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.sheet .lead{font-size:15px;color:var(--mute);line-height:1.5;margin-bottom:18px}
+.sheet textarea{width:100%;min-height:110px;border:0;background:var(--soft);border-radius:16px;padding:14px;font:inherit;font-size:16px;resize:none;outline:none}
+.sheet textarea:focus{box-shadow:inset 0 0 0 2px var(--blue)}
+.steps{list-style:none;counter-reset:s;margin:4px 0 18px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:center;font-size:15px;color:var(--ink2);padding:9px 0}
+.steps li::before{content:counter(s);width:26px;height:26px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-weight:700;font-size:13px;display:grid;place-items:center;flex:0 0 26px}
+.steps i{font-size:18px;vertical-align:-3px;color:var(--ink)}
+.second{width:100%;height:52px;border-radius:15px;background:var(--bg);font-size:16px;font-weight:600;color:var(--ink2);margin-top:8px}
+.toast{position:fixed;left:50%;bottom:calc(100px + var(--safe-b));transform:translate(-50%,20px);background:rgba(25,31,40,.92);color:#fff;font-size:14.5px;line-height:1.45;padding:13px 18px;border-radius:14px;z-index:30;opacity:0;transition:opacity .2s,transform .2s;width:max-content;max-width:calc(100% - 40px);text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<nav class="tabbar" id="tabbar">
+  <button data-tab="home"><i class="ti ti-home"></i><span>홈</span></button>
+  <button data-tab="qr"><i class="ti ti-scan"></i><span>QR 대여</span></button>
+  <button data-tab="my"><i class="ti ti-receipt"></i><span>내 대여</span></button>
+</nav>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ---------- 목업 데이터 ---------- */
+const PLACES = {
+  kgd: { name:'기경대', spots:{
+    mugung:  { name:'무궁관', where:'1층 사물함' },
+    frontier:{ name:'프론티어관', where:'2층 사물함' }
+  }},
+  itm: { name:'ITM학과', spots:{
+    room: { name:'학생회실', where:'입구 선반' }
+  }}
+};
+const ITEMS = {
+  umbrella:{ name:'우산',      icon:'umbrella',       tone:'blue',   returnable:true },
+  charger: { name:'충전기',    icon:'plug-connected', tone:'orange', returnable:true },
+  mat:     { name:'돗자리',    icon:'tent',           tone:'purple', returnable:true },
+  bandage: { name:'밴드',      icon:'bandage',        tone:'pink',   returnable:false },
+  tooth:   { name:'칫솔·치약', icon:'dental',         tone:'mint',   returnable:false },
+  pill:    { name:'상비약',    icon:'pill',           tone:'pink',   returnable:false }
+};
+const RENT_DAYS = 3;
+const DAY = 864e5;
+
+function seed(){
+  const t = today();
+  return {
+    stock:{
+      'kgd/mugung':   { umbrella:4, charger:1, mat:0, bandage:20, tooth:12 },
+      'kgd/frontier': { umbrella:2, charger:0, mat:1, bandage:15, tooth:8 },
+      'itm/room':     { umbrella:3, charger:2, bandage:10, pill:6 }
+    },
+    rentals:[
+      { id:'r1', place:'kgd', spot:'mugung', item:'umbrella', at:t-2*DAY, due:t+1*DAY },
+      { id:'r2', place:'itm', spot:'room', item:'charger', at:t-16*DAY, due:t-13*DAY, returnedAt:t-14*DAY },
+      { id:'r3', place:'kgd', spot:'mugung', item:'bandage', at:t-23*DAY }
+    ],
+    me:{ sid:'', name:'' },
+    ui:{ place:'kgd', spot:'mugung', hintClosed:false, lastNotified:0 },
+    updatedAt:Date.now()
+  };
+}
+
+/* ---------- 저장 (브라우저 저장소가 막혀 있으면 메모리로) ---------- */
+const KEY='kgd-rental-demo-v1';
+let mem=null;
+function load(){ try{ const s=localStorage.getItem(KEY); if(s) return JSON.parse(s);}catch(e){} return mem||seed(); }
+function save(){ mem=S; try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
+let S=load();
+
+/* ---------- 유틸 ---------- */
+function today(){ const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); }
+function md(ts){ const d=new Date(ts); return `${d.getMonth()+1}월 ${d.getDate()}일`; }
+function dleft(due){ return Math.round((due-today())/DAY); }
+function batchim(w){ const c=w.charCodeAt(w.length-1); return c>=0xAC00&&c<=0xD7A3 && (c-0xAC00)%28!==0; }
+const eul=w=>w+(batchim(w)?'을':'를'), eun=w=>w+(batchim(w)?'은':'는'), iga=w=>w+(batchim(w)?'이':'가');
+function status(n){ return n<=0?['없음','s-none']:n<=2?['부족','s-low']:['여유','s-ok']; }
+function ago(ts){ const m=Math.floor((Date.now()-ts)/6e4); return m<1?'방금 전 업데이트':m<60?`${m}분 전 업데이트`:`${Math.floor(m/60)}시간 전 업데이트`; }
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function active(){ return S.rentals.filter(r=>ITEMS[r.item].returnable && !r.returnedAt).sort((a,b)=>a.due-b.due); }
+function pastRentals(){ return S.rentals.filter(r=>r.returnedAt || !ITEMS[r.item].returnable).sort((a,b)=>(b.returnedAt||b.at)-(a.returnedAt||a.at)); }
+function urgent(){ return active().filter(r=>dleft(r.due)<=1); }
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+
+/* ---------- 라우팅 ---------- */
+let flash=null;
+function go(h){ location.hash=h; }
+window.addEventListener('hashchange',render);
+function route(){ const p=(location.hash.replace(/^#\/?/,'')||'home').split('/'); return p; }
+
+function render(){
+  closeSheet();
+  const [v,...a]=route();
+  const app=$('#app'); app.className='app';
+  let html='';
+  if(v==='rent'){ html=vRent(...a); app.classList.add('white','notab'); }
+  else if(v==='spot'){ html=vSpot(...a); }
+  else if(v==='my'){ html=vMy(); }
+  else if(v==='qr'){ html=vQR(); }
+  else { html=vHome(); }
+  app.innerHTML=html;
+  const tab = v==='spot'?'qr':(v==='rent'?null:(['my','qr'].includes(v)?v:'home'));
+  $('#tabbar').style.display = v==='rent'?'none':'flex';
+  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  bind(v,a);
+  window.scrollTo(0,0);
+}
+
+/* ---------- 홈: 재고 확인 ---------- */
+function itemRows(place,spot,sub){
+  const st=S.stock[`${place}/${spot}`]||{};
+  return Object.entries(st).map(([id,n])=>{
+    const it=ITEMS[id], [lbl,cls]=status(n);
+    return `<button class="row ${n<=0?'empty':''}" data-item="${id}" data-place="${place}" data-spot="${spot}">
+      <span class="ico t-${it.tone}"><i class="ti ti-${it.icon}"></i></span>
+      <span class="nm"><b>${it.name}</b><small>${sub}</small></span>
+      <span class="qty"><b class="${cls}">${n}개</b><small class="${cls}">${lbl}</small></span>
+    </button>`;}).join('');
+}
+function vHome(){
+  const P=PLACES[S.ui.place]; if(!P.spots[S.ui.spot]) S.ui.spot=Object.keys(P.spots)[0];
+  const spot=P.spots[S.ui.spot];
+  return `<div class="view">
+    <div class="top"><small>${P.name} 대여사업</small>
+      <button class="icon-btn" id="bell" aria-label="반납 알림"><i class="ti ti-bell"></i>${urgent().length?'<span class="dot"></span>':''}</button></div>
+    <h1>가기 전에<br>남은 물품을 확인하세요</h1>
+    <div class="seg" role="tablist">${Object.entries(PLACES).map(([k,p])=>`<button role="tab" data-place="${k}" class="${k===S.ui.place?'on':''}">${p.name}</button>`).join('')}</div>
+    <div class="card">
+      <div class="chips">${Object.entries(P.spots).map(([k,s])=>`<button class="chip ${k===S.ui.spot?'on':''}" data-spot="${k}">${s.name}</button>`).join('')}</div>
+      ${itemRows(S.ui.place,S.ui.spot,spot.where)}
+    </div>
+    <button class="updated" id="refresh"><i class="ti ti-refresh"></i><span>${ago(S.updatedAt)}</span></button>
+  </div>`;
+}
+
+/* ---------- QR로 들어온 사물함 화면 ---------- */
+function vSpot(place,spot){
+  const P=PLACES[place], s=P&&P.spots[spot];
+  if(!s) return vHome();
+  return `<div class="view">
+    <div class="top"><button class="back" data-back aria-label="뒤로"><i class="ti ti-chevron-left"></i></button><small>${P.name}</small></div>
+    <h1>${s.name} ${s.where}</h1>
+    <p class="sub">빌릴 물품을 고르세요</p>
+    <div class="card">${itemRows(place,spot,s.where)}</div>
+  </div>`;
+}
+
+/* ---------- 대여 등록 ---------- */
+function vRent(place,spot,item){
+  const P=PLACES[place], s=P&&P.spots[spot], it=ITEMS[item];
+  if(!s||!it) return vHome();
+  const due=today()+RENT_DAYS*DAY;
+  return `<div class="view">
+    <button class="back" data-back aria-label="뒤로"><i class="ti ti-chevron-left"></i></button>
+    <h1 style="margin-top:14px">${it.returnable?eul(it.name)+' 빌릴게요':eul(it.name)+' 가져갈게요'}</h1>
+    <p class="sub">${P.name} ${s.name}에서 ${it.returnable?'빌려요':'가져가요'}</p>
+    <div class="place"><span class="ico t-blue"><i class="ti ti-map-pin"></i></span><span><small>받는 곳</small><b>${s.name} ${s.where}</b></span></div>
+    <div class="field"><label for="sid">학번</label><input id="sid" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="2024XXXX" value="${esc(S.me.sid)}"><p class="err" id="sidErr"></p></div>
+    <div class="field"><label for="nm">이름</label><input id="nm" autocomplete="name" maxlength="10" placeholder="이름을 입력하세요" value="${esc(S.me.name)}"><p class="err"></p></div>
+    <div class="due">${it.returnable?`<span>반납 예정일</span><span><b>${md(due)}</b><em>${RENT_DAYS}일 뒤</em></span>`:`<span>반납</span><span><b>필요 없어요</b></span>`}</div>
+    <div style="height:150px"></div>
+    <div class="bottom">
+      <p class="note"><i class="ti ti-lock"></i>학번과 이름은 학기가 끝나면 자동으로 삭제돼요</p>
+      <button class="primary" id="doRent" disabled>${it.returnable?'대여하기':'가져가기'}</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- 내 대여 ---------- */
+function dBadge(r){ const d=dleft(r.due); if(d<0) return `<span class="dd dd-late">${-d}일 지남</span>`; if(d===0) return `<span class="dd dd-late">D-DAY</span>`; return `<span class="dd ${d<=1?'dd-warn':'dd-calm'}">D-${d}</span>`; }
+function vMy(){
+  const A=active(), H=pastRentals().slice(0,6), U=urgent();
+  let banner='';
+  if(flash){ banner=`<div class="banner b-${flash.type}"><i class="ti ti-${flash.type==='ok'?'circle-check':'info-circle'}"></i><span>${flash.text}</span></div>`; flash=null; }
+  else if(U.length){ const r=U[0], it=ITEMS[r.item], d=dleft(r.due);
+    banner = d<0 ? `<div class="banner b-late"><i class="ti ti-bell"></i><span>${it.name} 반납일이 ${-d}일 지났어요</span></div>`
+                 : `<div class="banner b-warn"><i class="ti ti-bell"></i><span>${eun(it.name)} ${d===0?'오늘':'내일'}까지 반납해 주세요</span></div>`; }
+  const hint = (!standalone && !S.ui.hintClosed && A.length) ? `<div class="hint"><span class="ico t-blue" style="width:38px;height:38px;flex-basis:38px;border-radius:12px"><i class="ti ti-device-mobile" style="font-size:20px"></i></span><p><b>반납 알림을 받으려면</b><br>이 앱을 홈 화면에 추가하세요</p><button id="howAdd" aria-label="방법 보기" style="font-size:14px;font-weight:600;color:var(--blue);padding:4px 2px">방법</button><button id="closeHint" aria-label="닫기"><i class="ti ti-x"></i></button></div>` : '';
+  const act = A.length ? A.map(r=>{ const it=ITEMS[r.item], s=PLACES[r.place].spots[r.spot];
+    return `<div class="rent-item"><div class="row"><span class="ico t-${it.tone}"><i class="ti ti-${it.icon}"></i></span>
+      <span class="nm"><b>${it.name}</b><small>${s.name} · ${md(r.at)}에 빌림</small></span>${dBadge(r)}</div>
+      <button class="ghost" data-return="${r.id}">반납했어요</button></div>`; }).join('')
+    : `<div class="none"><i class="ti ti-circle-check"></i><p>지금 빌린 물품이 없어요</p><small>필요할 때 홈에서 남은 물품을 확인하세요</small><button class="link" data-go="home">남은 물품 보기</button></div>`;
+  const hist = H.length ? H.map(r=>{ const it=ITEMS[r.item];
+    return `<div class="row"><span class="ico t-gray"><i class="ti ti-${it.icon}"></i></span>
+      <span class="nm"><b>${it.name}</b><small>${PLACES[r.place].name}</small></span>
+      <span class="qty">${r.returnedAt?md(r.returnedAt)+' 반납':md(r.at)}</span></div>`; }).join('') : `<p style="font-size:14px;color:var(--mute);padding:8px 0">아직 기록이 없어요</p>`;
+  return `<div class="view">
+    <div class="top"></div>
+    <h1 style="margin-top:0">내 대여</h1>
+    ${banner}${hint}
+    <div class="card"><h3>빌린 물품 ${A.length}개</h3>${act}</div>
+    <div class="card hist"><h3>지난 대여</h3>${hist}</div>
+    <button class="sug" id="suggest" style="margin-top:12px"><span class="ico t-purple"><i class="ti ti-message-plus"></i></span><span class="nm"><b style="font-size:16px">필요한 물품이 있나요?</b><small>학생회에 건의하기</small></span><i class="ti ti-chevron-right"></i></button>
+    <button class="reset" id="reset">데모 데이터 처음으로</button>
+  </div>`;
+}
+
+/* ---------- QR 대여 ---------- */
+function vQR(){
+  const spots=[]; Object.entries(PLACES).forEach(([pk,p])=>Object.entries(p.spots).forEach(([sk,s])=>spots.push({pk,sk,p,s})));
+  return `<div class="view">
+    <div class="top"></div>
+    <h1 style="margin-top:0">QR로 바로 대여</h1>
+    <div class="scan"><div class="frame"><i class="ti ti-qrcode"></i></div>
+      <p><b>휴대폰 카메라로 사물함의 QR을 비추세요</b><br>그 사물함의 대여 화면이 바로 열려요</p></div>
+    <div class="card"><h3>사물함 앞이라면 바로 열기</h3>
+      ${spots.map(x=>`<button class="row" data-go="spot/${x.pk}/${x.sk}"><span class="ico t-blue"><i class="ti ti-map-pin"></i></span><span class="nm"><b>${x.s.name} ${x.s.where}</b><small>${x.p.name}</small></span><i class="ti ti-chevron-right" style="font-size:20px;color:var(--faint)"></i></button>`).join('')}
+    </div>
+    <button class="reset" id="showQR" style="text-decoration:none;color:var(--mute)"><i class="ti ti-qrcode" style="vertical-align:-2px"></i> 사물함에 붙일 QR 보기</button>
+  </div>`;
+}
+
+/* ---------- 이벤트 ---------- */
+function bind(v,a){
+  document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>history.length>1?history.back():go('home'));
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  document.querySelectorAll('.seg [data-place]').forEach(b=>b.onclick=()=>{S.ui.place=b.dataset.place;S.ui.spot=Object.keys(PLACES[S.ui.place].spots)[0];save();render();});
+  document.querySelectorAll('.chip[data-spot]').forEach(b=>b.onclick=()=>{S.ui.spot=b.dataset.spot;save();render();});
+  document.querySelectorAll('.row[data-item]').forEach(b=>b.onclick=()=>pick(b.dataset.place,b.dataset.spot,b.dataset.item));
+  const bell=$('#bell'); if(bell) bell.onclick=openAlerts;
+  const rf=$('#refresh'); if(rf) rf.onclick=()=>{S.updatedAt=Date.now();save();render();toast('최신 재고로 바꿨어요');};
+  if(v==='rent') bindRent(...a);
+  if(v==='my'){
+    document.querySelectorAll('[data-return]').forEach(b=>b.onclick=()=>doReturn(b.dataset.return));
+    $('#suggest').onclick=openSuggest;
+    $('#reset').onclick=()=>{ if(confirm('데모 데이터를 처음 상태로 되돌릴까요?')){ S=seed(); save(); render(); toast('처음 상태로 되돌렸어요'); } };
+    const ch=$('#closeHint'); if(ch) ch.onclick=()=>{S.ui.hintClosed=true;save();render();};
+    const ha=$('#howAdd'); if(ha) ha.onclick=openInstall;
+  }
+  if(v==='qr') $('#showQR').onclick=openQR;
+}
+function pick(place,spot,item){
+  const n=(S.stock[`${place}/${spot}`]||{})[item]||0, it=ITEMS[item];
+  if(n>0) return go(`rent/${place}/${spot}/${item}`);
+  // 없으면 같은 대여처의 다른 건물을 알려준다
+  const alt=Object.entries(PLACES[place].spots).filter(([k])=>k!==spot).map(([k,s])=>({k,s,n:(S.stock[`${place}/${k}`]||{})[item]||0})).find(x=>x.n>0);
+  toast(alt ? `${PLACES[place].spots[spot].name}에는 없어요. ${alt.s.name}에 ${alt.n}개 남아 있어요` : `지금은 ${iga(it.name)} 모두 대여 중이에요`);
+  if(alt && route()[0]==='home'){ setTimeout(()=>{S.ui.spot=alt.k;save();render();},900); }
+}
+function bindRent(place,spot,item){
+  const sid=$('#sid'), nm=$('#nm'), btn=$('#doRent'), err=$('#sidErr');
+  const check=()=>{ sid.value=sid.value.replace(/\D/g,''); const ok=/^\d{8,10}$/.test(sid.value)&&nm.value.trim().length>=2; btn.disabled=!ok; err.textContent = sid.value && sid.value.length<8 ? '학번 8자리를 입력하세요' : ''; };
+  sid.oninput=check; nm.oninput=check; check();
+  if(!sid.value) setTimeout(()=>sid.focus(),250);
+  btn.onclick=()=>{
+    const key=`${place}/${spot}`, it=ITEMS[item];
+    if(!(S.stock[key][item]>0)){ toast('방금 다른 사람이 빌려갔어요'); return go('home'); }
+    S.stock[key][item]--; S.updatedAt=Date.now();
+    S.me={sid:sid.value,name:nm.value.trim()};
+    const r={id:'r'+Date.now(),place,spot,item,at:Date.now()};
+    if(it.returnable) r.due=today()+RENT_DAYS*DAY;
+    S.rentals.push(r); save();
+    flash = it.returnable ? {type:'info',text:`${eul(it.name)} 빌렸어요. ${md(r.due)}까지 반납해 주세요`} : {type:'ok',text:`${eul(it.name)} 가져갔어요`};
+    history.replaceState(null,'','#/my'); render();
+  };
+}
+function doReturn(id){
+  const r=S.rentals.find(x=>x.id===id); if(!r) return;
+  r.returnedAt=Date.now(); S.stock[`${r.place}/${r.spot}`][r.item]++; S.updatedAt=Date.now(); save();
+  flash={type:'ok',text:`${ITEMS[r.item].name} 반납이 완료되었어요`}; render();
+}
+
+/* ---------- 시트 ---------- */
+function openSheet(html){ const sh=$('#sheet'); sh.innerHTML='<div class="grab"></div>'+html; $('#scrim').classList.add('show'); sh.classList.add('show'); }
+function closeSheet(){ $('#scrim').classList.remove('show'); $('#sheet').classList.remove('show'); }
+$('#scrim').onclick=closeSheet;
+
+function openAlerts(){
+  const U=active();
+  const perm = ('Notification' in window) ? Notification.permission : 'unsupported';
+  const list = U.length ? U.map(r=>{const it=ITEMS[r.item];return `<div class="row"><span class="ico t-${it.tone}"><i class="ti ti-${it.icon}"></i></span><span class="nm"><b>${it.name}</b><small>${md(r.due)}까지 반납</small></span>${dBadge(r)}</div>`;}).join('') : `<p class="lead">지금 반납할 물품이 없어요</p>`;
+  let action='';
+  if(isIOS && !standalone) action=`<button class="primary" id="goInstall">알림 받는 방법 보기</button>`;
+  else if(perm==='granted') action=`<button class="primary" id="testNoti">알림 미리 받아보기</button>`;
+  else if(perm==='default') action=`<button class="primary" id="askNoti">반납 알림 켜기</button>`;
+  else if(perm==='denied') action=`<p class="lead" style="margin:0">브라우저 설정에서 이 사이트의 알림을 허용하면 반납 알림을 받을 수 있어요</p>`;
+  openSheet(`<h2>반납 알림</h2><p class="lead">반납일 하루 전과 당일에 알려드려요</p>${list}<div style="height:16px"></div>${action}<button class="second" id="closeS">닫기</button>`);
+  $('#closeS').onclick=closeSheet;
+  const gi=$('#goInstall'); if(gi) gi.onclick=openInstall;
+  const an=$('#askNoti'); if(an) an.onclick=async()=>{ const p=await Notification.requestPermission(); if(p==='granted'){ closeSheet(); toast('반납 알림을 켰어요'); notifyDue(true);} else { closeSheet(); toast('알림이 꺼져 있어요'); } };
+  const tn=$('#testNoti'); if(tn) tn.onclick=()=>{ closeSheet(); notifyDue(true); };
+}
+function openInstall(){
+  openSheet(`<h2>홈 화면에 추가하기</h2><p class="lead">앱스토어 없이 바로 설치돼요. 추가하면 반납 알림을 받을 수 있어요</p>
+    <ol class="steps">${isIOS
+      ? `<li>사파리 아래쪽 <i class="ti ti-upload"></i> 공유 버튼을 눌러요</li><li>‘홈 화면에 추가’를 눌러요</li><li>홈 화면의 아이콘으로 열고 알림을 켜요</li>`
+      : `<li>브라우저 메뉴(⋮)를 눌러요</li><li>‘홈 화면에 추가’ 또는 ‘앱 설치’를 눌러요</li><li>홈 화면의 아이콘으로 열고 알림을 켜요</li>`}</ol>
+    <button class="primary" id="okS">확인했어요</button>`);
+  $('#okS').onclick=closeSheet;
+}
+function openSuggest(){
+  openSheet(`<h2>필요한 물품이 있나요?</h2><p class="lead">학생회가 다음 학기 물품을 살 때 참고해요</p>
+    <textarea id="sugTxt" maxlength="200" placeholder="예: 시험 기간에 보조배터리가 있으면 좋겠어요"></textarea>
+    <div style="height:14px"></div><button class="primary" id="sendSug" disabled>건의 보내기</button><button class="second" id="closeS">닫기</button>`);
+  const t=$('#sugTxt'), b=$('#sendSug'); t.oninput=()=>b.disabled=t.value.trim().length<2;
+  b.onclick=()=>{ closeSheet(); toast('건의를 보냈어요. 고마워요'); };
+  $('#closeS').onclick=closeSheet; setTimeout(()=>t.focus(),250);
+}
+function openQR(){
+  const base=location.href.split('#')[0];
+  const spots=[]; Object.entries(PLACES).forEach(([pk,p])=>Object.entries(p.spots).forEach(([sk,s])=>spots.push({pk,sk,p,s})));
+  openSheet(`<h2>사물함에 붙일 QR</h2><p class="lead">인쇄해서 사물함에 붙이면, 찍는 순간 그 사물함의 대여 화면이 열려요</p>
+    <div class="qrgrid">${spots.map((x,i)=>`<div class="qrbox"><div class="qr" id="q${i}"></div><b>${x.s.name}</b><small>${x.p.name} · ${x.s.where}</small></div>`).join('')}</div>
+    <div style="height:16px"></div><button class="second" id="closeS">닫기</button>`);
+  $('#closeS').onclick=closeSheet;
+  if(window.QRCode) spots.forEach((x,i)=>new QRCode(document.getElementById('q'+i),{text:`${base}#/spot/${x.pk}/${x.sk}`,width:240,height:240,correctLevel:QRCode.CorrectLevel.M}));
+  else document.querySelector('.qrgrid').innerHTML='<p class="lead">QR을 만들려면 인터넷 연결이 필요해요</p>';
+}
+
+/* ---------- 토스트 ---------- */
+let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2400); }
+
+/* ---------- 알림 (서버 없이: 앱을 열 때 반납 임박 물품을 알려줌) ---------- */
+async function notifyDue(force){
+  if(!('Notification' in window) || Notification.permission!=='granted') return;
+  const U=urgent(); const r=U[0];
+  if(!r && !force) return;
+  if(!force && S.ui.lastNotified===today()) return;
+  const it=r?ITEMS[r.item]:ITEMS.umbrella, d=r?dleft(r.due):1;
+  const body = !r ? '반납일이 다가오면 이렇게 알려드려요' : d<0 ? `${it.name} 반납일이 ${-d}일 지났어요` : `${eun(it.name)} ${d===0?'오늘':'내일'}까지 반납해 주세요`;
+  try{
+    const reg = await navigator.serviceWorker?.getRegistration();
+    if(reg) reg.showNotification('기경대 대여',{body,icon:'icon-192.png',badge:'icon-192.png',tag:'due',data:{url:'#/my'}});
+    else new Notification('기경대 대여',{body,icon:'icon-192.png'});
+    S.ui.lastNotified=today(); save();
+  }catch(e){ toast(body); }
+}
+
+/* ---------- 시작 ---------- */
+document.querySelectorAll('.tabbar button').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+render();
+setTimeout(()=>notifyDue(false),1500);
+</script>
+</body>
+</html>
